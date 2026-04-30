@@ -11,8 +11,11 @@ of the queue.
 use rand::seq::SliceRandom; // rand is a random number generation library in Rust
 use rand::thread_rng;
 use std::collections::VecDeque;
+use cliclack::{intro, outro, select};
 
 fn main() {
+    intro("Fruit Salad Generator");
+
     let mut fruit: VecDeque<&str> = VecDeque::new();
     fruit.push_back("Arbutus");
     fruit.push_back("Loquat");
@@ -31,6 +34,25 @@ fn main() {
     fruit.push_back("Fig");
     fruit.push_back("Cherry");
 
+    let action = select("What would you like to do? (choose from the list below)")
+        .item("List", "List the fruits currently available", "")
+        .item("Add", "Add frtuit to your salad", "")
+        .item("Number", "Change the number of fruits in your salad", "")
+        .item("Remove", "Remove a fruit from your salad", "")
+        .interact();
+
+    match action {
+        Ok(c) => match c {
+            "List" => println!("The fruits currently available are: {:?}", fruit),
+            "Add" => println!("You can add more fruits to your salad!"),
+            "Number" => println!("You can change the number of fruits in your salad!"),
+            "Remove" => println!("You can remove a fruit from your salad!"),
+            _ => println!("Invalid choice!"),
+        },
+        Err(e) => eprint!("{}", e),
+
+    };
+        
     // Print out the fruit salad
     println!("Fruit Salad:");
     for (i, item) in fruit.iter().enumerate() {
@@ -40,4 +62,6 @@ fn main() {
             println!("{}", item);
         }
     }
+
+     outro("I hope you enjoyed your fruit salad!");
 }
