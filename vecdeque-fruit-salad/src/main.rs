@@ -41,7 +41,17 @@ fn main() {
         let _ = match actions::choose_action() {
             Ok(a) => { match &a[..] {
                 "List" => println!("The fruits currently available are: {:?}\n", fruit),
-                "Add" => println!("You can add more fruits to your salad!\n"),
+                "Add" => { let new_fruits = match actions::add() {
+                                Ok(s) => s,
+                                Err(e) => panic!("{e}"),                         
+                            }; 
+                            let mut vec2: VecDeque<&str> = VecDeque::new();
+                            let fruit_iter = new_fruits.split_whitespace();
+                            for line in fruit_iter {
+                                vec2.push_back(line);
+                            }
+                            fruit.append(&mut vec2);
+                        },
                 "Number" => println!("You can change the number of fruits in your salad!\n"),
                 "Remove" => println!("You can remove a fruit from your salad!\n"),
                 "Exit" => break,

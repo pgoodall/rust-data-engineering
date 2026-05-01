@@ -1,6 +1,8 @@
 
 pub mod actions {
-    use cliclack::{select};
+    //use std::collections::VecDeque;
+
+    use cliclack::{Input, select};
 
     pub fn choose_action() -> Result<String, std::io::Error> {
         let action = select("Use the arrow keys to choose an action below:")
@@ -12,5 +14,13 @@ pub mod actions {
             .interact()?;
         
         Ok(action.to_string())
+    }
+
+    pub fn add() -> Result<String, std::io::Error> {
+        let new_fruits = Input::new("Enter the frusts you want to add:")
+            .multiline()
+            .interact()?;
+
+        Ok(new_fruits)
     }
 }
