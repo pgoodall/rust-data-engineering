@@ -8,13 +8,16 @@ A VecDeque is a double-ended queue, which means that you can push and pop from b
 of the queue.
 */
 
-use rand::seq::SliceRandom; // rand is a random number generation library in Rust
-use rand::thread_rng;
+use rand::{rngs::ThreadRng, seq::SliceRandom}; // rand is a random number generation library in Rust
 use std::collections::VecDeque;
-use cliclack::{intro, outro, select};
+use cliclack::{intro, outro};
+use vecdeque_fruit_salad::actions;
 
 fn main() {
-    intro("Fruit Salad Generator");
+    let _ = match intro("Fruit Salad Generator") {
+        Ok(()) => (),
+        Err(e) => eprint!("Something went wrong: {}", e),
+    };
 
     let mut fruit: VecDeque<&str> = VecDeque::new();
     fruit.push_back("Arbutus");
@@ -22,7 +25,7 @@ fn main() {
     fruit.push_back("Strawberry Tree Berry");
 
     // Scramble (shuffle) the fruit
-    let mut rng = thread_rng();
+    let mut rng = ThreadRng::default();
     let mut fruit: Vec<_> = fruit.into_iter().collect();
     fruit.shuffle(&mut rng);
 
@@ -34,27 +37,22 @@ fn main() {
     fruit.push_back("Fig");
     fruit.push_back("Cherry");
 
-    let action = select("What would you like to do? (choose from the list below)")
-        .item("List", "List the fruits currently available", "")
-        .item("Add", "Add frtuit to your salad", "")
-        .item("Number", "Change the number of fruits in your salad", "")
-        .item("Remove", "Remove a fruit from your salad", "")
-        .interact();
-
-    match action {
-        Ok(c) => match c {
-            "List" => println!("The fruits currently available are: {:?}", fruit),
-            "Add" => println!("You can add more fruits to your salad!"),
-            "Number" => println!("You can change the number of fruits in your salad!"),
-            "Remove" => println!("You can remove a fruit from your salad!"),
-            _ => println!("Invalid choice!"),
-        },
-        Err(e) => eprint!("{}", e),
-
-    };
+    loop {
+        let _ = match actions::choose_action() {
+            Ok(a) => { match &a[..] {
+                "List" => println!("The fruits currently available are: {:?}\n", fruit),
+                "Add" => println!("You can add more fruits to your salad!\n"),
+                "Number" => println!("You can change the number of fruits in your salad!\n"),
+                "Remove" => println!("You can remove a fruit from your salad!\n"),
+                "Exit" => break,
+                _ => println!("Invalid choice!\n"),
+            }},
+            Err(e) => { eprint!("Error choosing action: {}", e)},
+        }; 
+    }
         
     // Print out the fruit salad
-    println!("Fruit Salad:");
+    println!("You final Fruit Salad:");
     for (i, item) in fruit.iter().enumerate() {
         if i != fruit.len() - 1 {
             print!("{}, ", item);
@@ -63,5 +61,8 @@ fn main() {
         }
     }
 
-     outro("I hope you enjoyed your fruit salad!");
+    let _ = match outro("I hope you enjoyed your fruit salad!\n") {
+        Ok(()) => (),
+        Err(e) => eprint!("Something went wrong: {}", e),
+    };
 }
