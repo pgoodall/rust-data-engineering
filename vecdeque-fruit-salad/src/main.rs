@@ -8,7 +8,9 @@ A VecDeque is a double-ended queue, which means that you can push and pop from b
 of the queue.
 */
 
-use rand::{rngs::ThreadRng, seq::SliceRandom}; // rand is a random number generation library in Rust
+use rand::rngs::ThreadRng;
+use rand::seq::SliceRandom;
+// rand is a random number generation library in Rust
 use std::collections::VecDeque;
 use cliclack::{intro, outro};
 use vecdeque_fruit_salad::actions;
@@ -19,10 +21,11 @@ fn main() {
         Err(e) => eprint!("Something went wrong: {}", e),
     };
 
-    let mut fruit: VecDeque<&str> = VecDeque::new();
-    fruit.push_back("Arbutus");
-    fruit.push_back("Loquat");
-    fruit.push_back("Strawberry Tree Berry");
+    //let mut fruit_iter: VecDeque<String> = VecDeque::new();
+    let mut fruit: VecDeque<String> = VecDeque::new();
+    fruit.push_back("Arbutus".to_string());
+    fruit.push_back("Loquat".to_string());
+    fruit.push_back("Strawberry Tree Berry".to_string());
 
     // Scramble (shuffle) the fruit
     let mut rng = ThreadRng::default();
@@ -33,26 +36,43 @@ fn main() {
     let mut fruit: VecDeque<_> = fruit.into_iter().collect();
 
     // Add fruits to the both ends of the queue after shuffling
-    fruit.push_front("Pomegranate");
-    fruit.push_back("Fig");
-    fruit.push_back("Cherry");
+    fruit.push_front("Pomegranate".to_string());
+    fruit.push_back("Fig".to_string());
+    fruit.push_back("Cherry".to_string());
 
     loop {
         let _ = match actions::choose_action() {
             Ok(a) => { match &a[..] {
                 "List" => println!("The fruits currently available are: {:?}\n", fruit),
-                "Add" => println!("You can add more fruits to your salad!\n"),
-                "Number" => println!("You can change the number of fruits in your salad!\n"),
+                "Add" => { let new_fruits = match actions::add() {
+                                Ok(s) => s,
+                                Err(e) => panic!("{e}"),                         
+                            };
+
+                            let mut fruit_iter: VecDeque<String> = new_fruits.split("\n").map(str::to_string).collect();
+                            fruit_iter.pop_back_if(|x| x == "");
+                            fruit.append(&mut fruit_iter);
+                        },
+                "Random" => actions::random(&fruit),
                 "Remove" => println!("You can remove a fruit from your salad!\n"),
-                "Exit" => break,
-                _ => println!("Invalid choice!\n"),
-            }},
-            Err(e) => { eprint!("Error choosing action: {}", e)},
-        }; 
+                "Exit" => { break;
+                    },
+                _ => eprint!("This should never happen!"),
+
+                }
+            },
+            Err(e) => eprint!("{}", e),
+        };
     }
-        
+                        
+    //let mut fruit_iter: VecDeque<String> = new_fruits.split_whitespace().map(str::to_string).collect();
+    // for line in fruit_iter {
+    //     vec2.push_back(&line);
+    // }
+    //fruit.append(&mut fruit_iter);
+
     // Print out the fruit salad
-    println!("You final Fruit Salad:");
+    println!("Your final Fruit Salad:");
     for (i, item) in fruit.iter().enumerate() {
         if i != fruit.len() - 1 {
             print!("{}, ", item);
@@ -65,4 +85,5 @@ fn main() {
         Ok(()) => (),
         Err(e) => eprint!("Something went wrong: {}", e),
     };
+
 }
