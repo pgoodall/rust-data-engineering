@@ -54,7 +54,7 @@ fn main() {
                             fruit.append(&mut fruit_iter);
                         },
                 "Random" => actions::random(&fruit),
-                "Remove" => println!("You can remove a fruit from your salad!\n"),
+                "Remove" => { fruit = actions::remove(fruit).expect("Error returning modified list.") },
                 "Exit" => { break;
                     },
                 _ => eprint!("This should never happen!"),

@@ -30,4 +30,38 @@ pub mod actions {
         println!("Random fruit: {}\n", fruit.iter().choose(&mut rng()).unwrap());
 
     }
+
+    pub fn remove(fruit: VecDeque<String>) -> Result<VecDeque<String>, &'static str> {
+        // convert fruit to Vec for autocomplete        
+        let fruit_list: Vec<String> = fruit.clone().into_iter().collect();
+
+        // Take user input with autocomplete
+        let remove: String = match Input::new("Choose a fruit to remove") 
+            .autocomplete(fruit_list)
+            .interact() {
+                Ok(s) => s,
+                Err(e) => return Err("Error entering fruit."),
+            };
+
+        // convert back to VecDeque 
+        let mut fruit: VecDeque<String> = fruit.into_iter().collect();
+
+        // Check if the input matches the list of fruit
+        let mut index = None;
+        for (i, item) in fruit.iter().enumerate() {
+            if item == &remove {
+                index = Some(i);
+            } 
+        }
+
+        // If no match is made, return an error
+        let fruit_index = match index {
+            Some(i) => i,
+            None => return Err("Invalid input for fruit.")
+        };
+
+        println!("You removed {} from the list.\n", fruit.remove(fruit_index).expect("Error finding fruit."));
+
+        Ok(fruit)
+    }
 }
