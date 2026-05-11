@@ -2,7 +2,7 @@ use clap::Parser;
 use std::collections::HashMap;
 use std::hash::Hash;
 
-#[derive(Parser, Iterator, Debug)]
+#[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 pub struct Config {
     /// A list of numbers with some numbers repeated

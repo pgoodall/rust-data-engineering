@@ -6,9 +6,6 @@ use hashmap_count::{frequency, Config};
 
 fn main() {
     let args = Config::parse();
-    for arg in args {
-        print!("{:?}", arg)
-    }
     
     let numbers: Vec<i32> = args.num_list
                             .unwrap()
