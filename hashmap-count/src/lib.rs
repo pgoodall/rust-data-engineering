@@ -2,14 +2,14 @@ use clap::Parser;
 use std::collections::HashMap;
 use std::hash::Hash;
 
-#[derive(Parser, Debug)]
+#[derive(Parser, Iterator, Debug)]
 #[command(version, about, long_about = None)]
 pub struct Config {
     /// A list of numbers with some numbers repeated
     #[arg(short, long)]
     pub num_list: Option<String>,
 
-    /// Count occurances of a work in a short sentence
+    /// Count occurances of a word in a short sentence
     #[arg(short, long)]
     pub sentence: Option<String>,
 

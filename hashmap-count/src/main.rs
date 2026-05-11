@@ -6,12 +6,18 @@ use hashmap_count::{frequency, Config};
 
 fn main() {
     let args = Config::parse();
+    for arg in args {
+        print!("{:?}", arg)
+    }
+    
     let numbers: Vec<i32> = args.num_list
-                                .unwrap()
-                                .split(",")
-                                .map(|n| n.parse::<i32>().unwrap())
-                                .collect();
-
+                            .unwrap()
+                            .split(",")
+                            .map(| x | x.trim().parse::<i32>()
+                            .unwrap())
+                            .collect();
+    //println!("{:?}", numbers);
+    
     //let numbers = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 3];
     let map = frequency(numbers);
     let mut result = Vec::new();
