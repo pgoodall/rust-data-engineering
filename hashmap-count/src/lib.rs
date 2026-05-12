@@ -9,6 +9,8 @@ pub struct Config {
     #[arg(short, long)]
     pub num_list: Option<String>,
 
+    clean_num_list: Vec<i32>,
+
     /// Count occurances of a word in a short sentence
     #[arg(short, long)]
     pub sentence: Option<String>,
@@ -33,6 +35,16 @@ where
         }
 
     frequencies
+}
+
+pub fn validate_num_list(nums: String) -> Vec<i32> {
+    let numbers: Vec<i32> = nums
+                            .split(",")
+                            .map(| x | x.trim().parse::<i32>()
+                            .unwrap())
+                            .collect();
+
+    numbers
 }
 #[cfg(test)]
 mod tests {
