@@ -27,14 +27,18 @@ fn main() {
             "The frequency of each number in the vector is:\n{:?}",
             result);
     } else if let Some(s) = args.sentence {
-        let sentence: Vec<&str> = s.split_whitespace().map(|x| x.trim()).collect();
+        let sentence: Vec<String> = s
+                                    .split_whitespace()
+                                    .map(|s| s
+                                        .replace(&['(', ')', ',', '\"', '.', ';', ':', '\''][..], ""))
+                                    .collect();
         let map = frequency(sentence);
         let mut result: Vec<String> = Vec::new();
         for (key, frequency) in map {
             result.push(format!("{}: {}", key, frequency))
         }
         println!(
-            "The frequncy of each word in the vector is:\n{:?}",
+            "The frequncy of each word in the vector is:\n{:#?}",
             result);
     };
 
