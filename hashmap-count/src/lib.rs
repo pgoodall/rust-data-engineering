@@ -46,6 +46,18 @@ pub fn validate_num_list(nums: String) -> Vec<i32> {
 
     numbers
 }
+
+pub fn load_file(f: &String) -> Result<String, std::io::Error> {
+    use std::fs::File;
+    use std::io::prelude::*;
+
+    let mut file = File::open(f)?;
+    let mut contents = String::new();
+    file.read_to_string(&mut contents)?;
+
+    Ok(contents)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
