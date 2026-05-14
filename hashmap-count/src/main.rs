@@ -41,14 +41,5 @@ fn main() {
             "The frequncy of each word in the vector is:\n{:#?}",
             result);
     };
-
-    
-    // let map = frequency(numbers);
-    // let mut result = Vec::new();
-    // for (key, frequency) in map {
-    //     result.push(format!("{}: {}", key, frequency))
-    // }
-
-    //print the results in a human readable format that explains what the result is.
     
 }
