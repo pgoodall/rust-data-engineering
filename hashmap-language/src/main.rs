@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+//use std::fmt::Display;
 
 fn init_languages() -> HashMap<String, i32> {
     let mut languages = HashMap::new();
@@ -40,6 +41,19 @@ fn calculate_weights(years_active: &mut HashMap<String, i32>) -> HashMap<String,
     weights
 }
 
+fn sort_langs(map: &HashMap<String, i32>, rev: bool) {
+    let mut map_vec= map.iter().collect::<Vec<_>>();
+    map_vec.sort_by_key(|m| m.1);
+
+    if rev == true {
+        map_vec.reverse();
+    }
+
+    for (k, v) in &map_vec {
+        println!("{}: {}", k, v)
+    }
+}
+
 fn main() {
     let mut languages = init_languages();
     let weights = calculate_weights(&mut languages);
@@ -48,4 +62,10 @@ fn main() {
     for (language, weight) in &weights {
         println!("{}: {}", language, weight);
     }
+
+    println!("\nLanguage weights sorted lowest to highest:");
+    sort_langs(&languages, false);
+
+    println!("\nLanguage weights sorted highest to lowest:");
+    sort_langs(&languages, true);
 }
