@@ -13,8 +13,7 @@
 
 use rayon::prelude::*;
 use wikipedia::http::default::Client;
-use wikipedia::Page;
-use wikipedia::Wikipedia;
+use wikipedia::{Page, Wikipedia};
 
 struct ProcessedPage {
     title: String,
