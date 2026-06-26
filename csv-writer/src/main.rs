@@ -1,6 +1,6 @@
 use csv::{Reader, Writer};
 use std::io;
-use std::fmt;
+// use std::fmt; // Not needed for now
 use std::error::Error;
 
 // Even though it is beyond the brief, I'm implementing custom error messages.
@@ -40,8 +40,39 @@ use std::error::Error;
 //     }
 // }
 
-
-fn main() -> Result<(), FileError> {
+fn write_csv(list: (&str, f64), path: Option<&str>) -> Result<(), Box<dyn Error>> {
+    match path {
+        Some(path) => { let mut wtr = Writer::from_path(path)? },
+        None => { for (name, price) in list {
+                    
+        }}
+    }
     
-    Ok()
+    for (name, price) in list {
+        wtr.write_record([name, price.to_string()])?;
+    }
+
+    Ok(())
+}
+fn read_csv(file: &str) -> Result<(), Box<dyn Error>> {
+    let mut rdr = Reader::from_path(file)?;
+    for result in rdr.records() {
+        let record = result?;
+        println!("{:?}", record);
+    }
+    Ok(())
+}
+fn main() -> Result<(), Box<dyn Error>> {
+    let fruits = [
+        ("Apple", 1.25),
+        ("Banana", 0.75),
+        ("Orange", 1.00),
+        ("Mango", 2.50),
+        ("Pineapple", 3.00),
+    ];
+
+    let product_list = write_csv(fruits, "data/product_list.csv")?;
+    
+    let _rdr = read_csv("data/output.csv")?;
+    Ok(())
 }
